@@ -20,9 +20,7 @@ spec:
         prometheus.io/port: {{ .Values.container.port.http | quote }}
         rollme: {{ randAlphaNum 5 | quote }}   
       labels:
-{{- if .Values.podLabels }}
-{{ toYaml .Values.podLabels | indent 8 }}
-{{- end }}
+      {{- include "zebrands.selectorLabels" . | nindent 8 }}
     spec:
     {{- if eq .Values.hostAliases.enabled true }}
       hostAliases:

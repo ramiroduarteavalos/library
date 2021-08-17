@@ -1,24 +1,14 @@
 apiVersion: v1
 entries:
-  ingress:
-  - apiVersion: v1
-    appVersion: "1.0"
-    created: "2021-08-17T08:29:56.901036548-03:00"
-    description: A Helm chart for installing ingresses for the microservices
-    digest: 1a8c632f8f4adfc135c19eb61ec6d47691a05e104111e266a9a4162ebc7434bf
-    name: ingress
-    urls:
-    - https://ramiroduarteavalos.github.io/library/charts/ingress-0.0.1.tgz
-    version: 0.0.1
   zebrands:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-08-17T08:29:56.901517299-03:00"
+    created: "2021-08-17T10:25:14.292086885-03:00"
     description: A Helm chart for Kubernetes
-    digest: ed08e1bddaa2d82a8c85f9e097ecd73aa74f2573e5c534538490c51b518fccea
+    digest: 35b515f56aa226fe573ef6b00d0710ff292d6278d9f561bc82f4e55421e6e328
     name: zebrands
     type: application
     urls:
     - https://ramiroduarteavalos.github.io/library/charts/zebrands-0.1.0.tgz
     version: 0.1.0
-generated: "2021-08-17T08:29:56.900742636-03:00"
+generated: "2021-08-17T10:25:14.286938362-03:00"
