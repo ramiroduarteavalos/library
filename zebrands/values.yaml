@@ -5,12 +5,14 @@
 replicaCount: 1
 
 image:
-  repository: nginx
-  pullPolicy: IfNotPresent
+  repository: ramiroduarteavalos
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "latest"
 
-imagePullSecrets: []
+imagePullSecrets:
+  - name: registry
+
 nameOverride: ""
 fullnameOverride: ""
 
@@ -36,9 +38,29 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
+container:
+  port:
+    http: 8000
+    grpc: 6565
+
 service:
+  # Paso esto a los values de cada microservicio
   type: ClusterIP
-  port: 80
+  port:
+    http: 8000
+    grpc: 6565
+
+readiness:
+  path: /actuator/health
+  delay: 10
+  period: 10
+  timeout: 15
+
+liveness:
+  path: /actuator/health
+  port: http
+  delay: 10
+  period: 10
 
 ingress:
   enabled: false
@@ -66,9 +88,9 @@ resources: {}
   #   memory: 128Mi
 
 autoscaling:
-  enabled: false
+  enabled: true
   minReplicas: 1
-  maxReplicas: 100
+  maxReplicas: 5
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
@@ -77,3 +99,14 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+# Host Aliases
+# This section allows you to override DNS entries in the pods /etc/hosts
+hostAliases:
+  enabled: false
+  list:
+    local: 127.0.0.1
+    external.com: 1.2.3.4
+
+# Pod environment variables
+env: {}

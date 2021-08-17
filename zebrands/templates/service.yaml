@@ -7,9 +7,15 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
+    - port: {{ .Values.service.port.http}}
+      targetPort: {{ .Values.service.port.http}}
       protocol: TCP
       name: http
+    {{- if eq .Values.grpcEnabled true}}
+    - port: {{ .Values.service.port.grpc }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
+    {{- end}}      
   selector:
     {{- include "zebrands.selectorLabels" . | nindent 4 }}
