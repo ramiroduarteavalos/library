@@ -1,0 +1,32 @@
+apiVersion: v1
+entries:
+  alertmanager-gchat:
+  - apiVersion: v1
+    appVersion: 1.0.0
+    created: "2021-10-07T11:47:18.204543-03:00"
+    description: A Helm chart for the calert webhook used for Prometheus to Google
+      Chat integration
+    digest: df23f935749d2e4cdf82fd232d0e82707c71f43f822e477109ec969be47ff701
+    home: https://github.com/mr-karan/calert
+    icon: https://github.com/mr-karan/calert/raw/master/images/logo.png
+    maintainers:
+    - email: karansharma1295@gmail.com
+      name: Karan Sharma
+    name: alertmanager-gchat
+    sources:
+    - https://github.com/mr-karan/calert
+    urls:
+    - https://ramiroduarteavalos.github.io/library/charts/alertmanager-gchat-1.0.0.tgz
+    version: 1.0.0
+  zebrands:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-10-07T11:47:18.204922-03:00"
+    description: A Helm chart for Kubernetes
+    digest: 35b515f56aa226fe573ef6b00d0710ff292d6278d9f561bc82f4e55421e6e328
+    name: zebrands
+    type: application
+    urls:
+    - https://ramiroduarteavalos.github.io/library/charts/zebrands-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-10-07T11:47:18.203659-03:00"
