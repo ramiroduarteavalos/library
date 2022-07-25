@@ -1,0 +1,84 @@
+{{- $chartName := include "ramiro.fullname" . -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ramiro.fullname" . }}
+  labels:
+    {{- include "ramiro.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "ramiro.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: {{ .Values.prometheusEnabled | quote }}
+        #prometheus.io/path: /actuactor/prometheus
+        prometheus.io/port: {{ .Values.container.port.http | quote }}
+        rollme: {{ randAlphaNum 5 | quote }}   
+      labels:
+      {{- include "ramiro.selectorLabels" . | nindent 8 }}
+    spec:
+    {{- if eq .Values.hostAliases.enabled true }}
+      hostAliases:
+      {{- range $key, $val := .Values.hostAliases.list }}
+      - ip: {{ $val | quote }}
+        hostnames:
+        - {{ $key | quote }}
+      {{- end}}
+    {{- end}}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "ramiro.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}/{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.container.port.http }}
+              protocol: TCP
+          #livenessProbe:
+          #  httpGet:
+          #    path: {{ .Values.liveness.path }}
+          #  #tcpSocket:
+          #    port: {{ .Values.liveness.port }}
+          #  initialDelaySeconds: {{ .Values.liveness.delay }}
+          #  periodSeconds: {{ .Values.liveness.period }}
+          #readinessProbe:
+          #  httpGet:
+          #    path: {{ .Values.readiness.path }}
+          #    port: {{ .Values.liveness.port }}
+          #  initialDelaySeconds: {{ .Values.readiness.delay }}
+          #  timeoutSeconds: {{ .Values.readiness.timeout }}
+          #  periodSeconds: {{ .Values.readiness.period }}
+          envFrom:
+          - configMapRef:
+              name: {{ $chartName }}-config
+          {{- if (ne .Release.Namespace "dev") }}
+          - secretRef:
+              name: {{ $chartName }}-secrets
+          {{- end}}          
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
